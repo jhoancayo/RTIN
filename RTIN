@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoCAD Training - 12 Niveles</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .progress-section {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #00ff87, #60efff);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 20px rgba(0, 255, 135, 0.3);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #FFD700;
+        }
+
+        .levels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .level-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .level-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-color: #FFD700;
+        }
+
+        .level-card.completed {
+            background: linear-gradient(135deg, rgba(0, 255, 135, 0.2), rgba(96, 239, 255, 0.2));
+            border-color: #00ff87;
+        }
+
+        .level-card.locked {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .level-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .level-number {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #FFD700;
+        }
+
+        .level-status {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .status-completed {
+            background: linear-gradient(45deg, #00ff87, #60efff);
+            color: #000;
+        }
+
+        .status-available {
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            color: #000;
+        }
+
+        .status-locked {
+            background: rgba(255, 255, 255, 0.2);
+            color: #ccc;
+        }
+
+        .level-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #FFD700;
+        }
+
+        .level-description {
+            color: #e0e0e0;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .level-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .difficulty {
+            display: flex;
+            gap: 3px;
+        }
+
+        .star {
+            color: #FFD700;
+            font-size: 1.2em;
+        }
+
+        .star.empty {
+            color: rgba(255, 215, 0, 0.3);
+        }
+
+        .time-estimate {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.9em;
+        }
+
+        .level-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .achievements {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            margin-top: 40px;
+        }
+
+        .achievements h3 {
+            color: #FFD700;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .badge {
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .badge.locked {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ccc;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 30px;
+            cursor: pointer;
+            color: #fff;
+        }
+
+        /* Login Screen Styles */
+        .login-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-header h1 {
+            font-size: 2.2em;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .login-header p {
+            color: #e0e0e0;
+            margin-bottom: 10px;
+        }
+
+        .login-form {
+            margin: 30px 0;
+        }
+
+        .login-form input {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .login-form input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .login-form input:focus {
+            outline: none;
+            border-color: #FFD700;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            margin-top: 15px;
+            font-weight: bold;
+            min-height: 20px;
+        }
+
+        .login-footer p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9em;
+            margin-top: 20px;
+        }
+
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .header {
+            position: relative;
+        }
+
+        @media (max-width: 768px) {
+            .levels-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .login-container {
+                padding: 30px 20px;
+            }
+
+            .logout-btn {
+                position: static;
+                margin-top: 15px;
+                width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-container">
+            <div class="login-header">
+                <h1>🎯 AutoCAD Training RTIN</h1>
+                <p>Impulso Académico Perú - RTIN</p>
+                <p>Acceso exclusivo para la comunidad RTIN</p>
+            </div>
+            <div class="login-form">
+                <input type="password" id="passwordInput" placeholder="Ingresa la contraseña RTIN" maxlength="20">
+                <button onclick="checkPassword()" class="login-btn">🔓 Acceder</button>
+                <div id="errorMessage" class="error-message"></div>
+            </div>
+            <div class="login-footer">
+                <p>¿No tienes la contraseña? Contacta a tu instructor RTIN</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="mainContent" style="display: none;">
+        <div class="header">
+            <h1>🎯 AutoCAD Training - 12 Niveles</h1>
+            <p>Impulso Académico Perú - RTIN | Domina AutoCAD paso a paso</p>
+            <button onclick="logout()" class="logout-btn">🚪 Salir</button>
+        </div>
+
+        <div class="progress-section">
+            <h3>Tu Progreso</h3>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="completedLevels">0</div>
+                    <div>Niveles Completados</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalTime">0</div>
+                    <div>Horas Invertidas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="currentStreak">0</div>
+                    <div>Racha Actual</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalPoints">0</div>
+                    <div>Puntos Totales</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="levels-grid" id="levelsGrid">
+            <!-- Los niveles se generan dinámicamente -->
+        </div>
+
+        <div class="achievements">
+            <h3>🏆 Logros</h3>
+            <div class="badges" id="badgesContainer">
+                <!-- Los badges se generan dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para detalles del nivel -->
+    <div id="levelModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // Configuración de contraseña
+        const RTIN_PASSWORD = "RTIN2026";
+
+        // Verificar si ya está logueado
+        function checkLoginStatus() {
+            const isLoggedIn = sessionStorage.getItem('rtinLoggedIn');
+            if (isLoggedIn === 'true') {
+                showMainContent();
+            } else {
+                showLoginScreen();
+            }
+        }
+
+        // Mostrar pantalla de login
+        function showLoginScreen() {
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('mainContent').style.display = 'none';
+        }
+
+        // Mostrar contenido principal
+        function showMainContent() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'block';
+        }
+
+        // Verificar contraseña
+        function checkPassword() {
+            const inputPassword = document.getElementById('passwordInput').value;
+            const errorMessage = document.getElementById('errorMessage');
+            
+            if (inputPassword === RTIN_PASSWORD) {
+                sessionStorage.setItem('rtinLoggedIn', 'true');
+                showMainContent();
+                loadProgress();
+                updateUI();
+            } else {
+                errorMessage.textContent = '❌ Contraseña incorrecta. Contacta a tu instructor RTIN.';
+                document.getElementById('passwordInput').value = '';
+                document.getElementById('passwordInput').focus();
+            }
+        }
+
+        // Logout
+        function logout() {
+            if (confirm('¿Estás seguro de que quieres salir?')) {
+                sessionStorage.removeItem('rtinLoggedIn');
+                showLoginScreen();
+            }
+        }
+
+        // Permitir enter en el campo de contraseña
+        document.addEventListener('DOMContentLoaded', function() {
+            const passwordInput = document.getElementById('passwordInput');
+            if (passwordInput) {
+                passwordInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        checkPassword();
+                    }
+                });
+            }
+        });
+
+        // Datos de los niveles
+        const levelsData = [
+            {
+                id: 1,
+                title: "Fundamentos Básicos",
+                description: "Interfaz de AutoCAD, comandos básicos, configuración inicial",
+                difficulty: 1,
+                timeEstimate: "2-3 horas",
+                topics: ["Interfaz", "Comandos LINE, CIRCLE", "Coordenadas", "Zoom y Pan"],
+                pdfLink: "https://ejemplo.com/nivel1.pdf",
+                videoLink: "https://ejemplo.com/video1"
+            },
+            {
+                id: 2,
+                title: "Dibujo 2D Básico",
+                description: "Creación de formas básicas, modificación de objetos",
+                difficulty: 2,
+                timeEstimate: "3-4 horas",
+                topics: ["RECTANGLE", "POLYGON", "TRIM", "EXTEND", "COPY"],
+                pdfLink: "https://ejemplo.com/nivel2.pdf",
+                videoLink: "https://ejemplo.com/video2"
+            },
+            {
+                id: 3,
+                title: "Precisión y Coordenadas",
+                description: "Sistemas de coordenadas, snap, ortho, grid",
+                difficulty: 2,
+                timeEstimate: "2-3 horas",
+                topics: ["Coordenadas absolutas", "Relativas", "Polares", "OSNAP"],
+                pdfLink: "https://ejemplo.com/nivel3.pdf",
+                videoLink: "https://ejemplo.com/video3"
+            },
+            {
+                id: 4,
+                title: "Capas y Propiedades",
+                description: "Gestión de capas, colores, tipos de línea",
+                difficulty: 3,
+                timeEstimate: "3-4 horas",
+                topics: ["LAYER", "Propiedades", "Linetype", "Color"],
+                pdfLink: "https://ejemplo.com/nivel4.pdf",
+                videoLink: "https://ejemplo.com/video4"
+            },
+            {
+                id: 5,
+                title: "Texto y Anotaciones",
+                description: "Inserción de texto, estilos, dimensiones básicas",
+                difficulty: 3,
+                timeEstimate: "4-5 horas",
+                topics: ["TEXT", "MTEXT", "Estilos de texto", "Dimensiones"],
+                pdfLink: "https://ejemplo.com/nivel5.pdf",
+                videoLink: "https://ejemplo.com/video5"
+            },
+            {
+                id: 6,
+                title: "Bloques y Referencias",
+                description: "Creación y uso de bloques, bibliotecas",
+                difficulty: 4,
+                timeEstimate: "4-5 horas",
+                topics: ["BLOCK", "INSERT", "Atributos", "Bibliotecas"],
+                pdfLink: "https://ejemplo.com/nivel6.pdf",
+                videoLink: "https://ejemplo.com/video6"
+            },
+            {
+                id: 7,
+                title: "Acotado Avanzado",
+                description: "Dimensionado completo, estilos de cota",
+                difficulty: 4,
+                timeEstimate: "5-6 horas",
+                topics: ["DIMSTYLE", "Cotas lineales", "Angulares", "Radiales"],
+                pdfLink: "https://ejemplo.com/nivel7.pdf",
+                videoLink: "https://ejemplo.com/video7"
+            },
+            {
+                id: 8,
+                title: "Diseño Paramétrico",
+                description: "Restricciones geométricas y dimensionales",
+                difficulty: 5,
+                timeEstimate: "5-6 horas",
+                topics: ["Restricciones", "Parámetros", "Diseño dinámico"],
+                pdfLink: "https://ejemplo.com/nivel8.pdf",
+                videoLink: "https://ejemplo.com/video8"
+            },
+            {
+                id: 9,
+                title: "Presentación y Layout",
+                description: "Espacio papel, escalas, ventanas gráficas",
+                difficulty: 5,
+                timeEstimate: "6-7 horas",
+                topics: ["Layout", "Viewport", "Escalas", "Ploteo"],
+                pdfLink: "https://ejemplo.com/nivel9.pdf",
+                videoLink: "https://ejemplo.com/video9"
+            },
+            {
+                id: 10,
+                title: "3D Básico",
+                description: "Introducción al modelado 3D, vistas isométricas",
+                difficulty: 6,
+                timeEstimate: "7-8 horas",
+                topics: ["3D Básico", "Vistas 3D", "Coordenadas 3D", "Sólidos básicos"],
+                pdfLink: "https://ejemplo.com/nivel10.pdf",
+                videoLink: "https://ejemplo.com/video10"
+            },
+            {
+                id: 11,
+                title: "Proyecto Integrador",
+                description: "Desarrollo de un proyecto completo de ingeniería",
+                difficulty: 6,
+                timeEstimate: "8-10 horas",
+                topics: ["Proyecto completo", "Integración", "Mejores prácticas"],
+                pdfLink: "https://ejemplo.com/nivel11.pdf",
+                videoLink: "https://ejemplo.com/video11"
+            },
+            {
+                id: 12,
+                title: "Maestría y Certificación",
+                description: "Técnicas avanzadas, optimización, preparación profesional",
+                difficulty: 6,
+                timeEstimate: "10-12 horas",
+                topics: ["Técnicas avanzadas", "Optimización", "Certificación"],
+                pdfLink: "https://ejemplo.com/nivel12.pdf",
+                videoLink: "https://ejemplo.com/video12"
+            }
+        ];
+
+        // Badges disponibles
+        const badgesData = [
+            { id: 'first_steps', name: 'Primeros Pasos', icon: '🚀', requirement: 1 },
+            { id: 'persistent', name: 'Persistente', icon: '💪', requirement: 3 },
+            { id: 'half_way', name: 'A medio camino', icon: '🎯', requirement: 6 },
+            { id: 'advanced', name: 'Avanzado', icon: '🔥', requirement: 9 },
+            { id: 'master', name: 'Maestro AutoCAD', icon: '👑', requirement: 12 },
+            { id: 'speed_runner', name: 'Velocista', icon: '⚡', requirement: 'special' }
+        ];
+
+        // Estado del usuario (normalmente esto vendría de una base de datos)
+        let userProgress = {
+            completedLevels: [],
+            totalTime: 0,
+            currentStreak: 0,
+            totalPoints: 0
+        };
+
+        // Cargar progreso del localStorage (simulación)
+        function loadProgress() {
+            const saved = localStorage.getItem('autocadProgress');
+            if (saved) {
+                userProgress = JSON.parse(saved);
+            }
+        }
+
+        // Guardar progreso
+        function saveProgress() {
+            localStorage.setItem('autocadProgress', JSON.stringify(userProgress));
+        }
+
+        // Generar estrellas para dificultad
+        function generateStars(difficulty) {
+            let stars = '';
+            for (let i = 1; i <= 6; i++) {
+                stars += `<span class="star ${i <= difficulty ? '' : 'empty'}">★</span>`;
+            }
+            return stars;
+        }
+
+        // Verificar si un nivel está disponible
+        function isLevelAvailable(levelId) {
+            if (levelId === 1) return true;
+            return userProgress.completedLevels.includes(levelId - 1);
+        }
+
+        // Verificar si un nivel está completado
+        function isLevelCompleted(levelId) {
+            return userProgress.completedLevels.includes(levelId);
+        }
+
+        // Obtener estado del nivel
+        function getLevelStatus(levelId) {
+            if (isLevelCompleted(levelId)) {
+                return { class: 'completed', text: 'Completado', statusClass: 'status-completed' };
+            } else if (isLevelAvailable(levelId)) {
+                return { class: 'available', text: 'Disponible', statusClass: 'status-available' };
+            } else {
+                return { class: 'locked', text: 'Bloqueado', statusClass: 'status-locked' };
+            }
+        }
+
+        // Renderizar niveles
+        function renderLevels() {
+            const grid = document.getElementById('levelsGrid');
+            grid.innerHTML = '';
+
+            levelsData.forEach(level => {
+                const status = getLevelStatus(level.id);
+                const card = document.createElement('div');
+                card.className = `level-card ${status.class}`;
+                card.onclick = () => openLevelModal(level);
+
+                card.innerHTML = `
+                    <div class="level-header">
+                        <div class="level-number">Nivel ${level.id}</div>
+                        <div class="level-status ${status.statusClass}">${status.text}</div>
+                    </div>
+                    <div class="level-title">${level.title}</div>
+                    <div class="level-description">${level.description}</div>
+                    <div class="level-info">
+                        <div class="difficulty">${generateStars(level.difficulty)}</div>
+                        <div class="time-estimate">⏱️ ${level.timeEstimate}</div>
+                    </div>
+                    <div class="level-actions">
+                        <a href="${level.pdfLink}" class="btn btn-primary" ${status.class === 'locked' ? 'onclick="return false;" style="opacity: 0.5;"' : ''}>
+                            📄 Descargar PDF
+                        </a>
+                        <a href="${level.videoLink}" class="btn btn-secondary" ${status.class === 'locked' ? 'onclick="return false;" style="opacity: 0.5;"' : ''}>
+                            🎥 Ver Video
+                        </a>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Abrir modal de nivel
+        function openLevelModal(level) {
+            const status = getLevelStatus(level.id);
+            if (status.class === 'locked') {
+                alert('Este nivel está bloqueado. Completa el nivel anterior primero.');
+                return;
+            }
+
+            const modal = document.getElementById('levelModal');
+            const content = document.getElementById('modalContent');
+            
+            content.innerHTML = `
+                <h2>Nivel ${level.id}: ${level.title}</h2>
+                <p><strong>Dificultad:</strong> ${generateStars(level.difficulty)}</p>
+                <p><strong>Tiempo estimado:</strong> ${level.timeEstimate}</p>
+                <p><strong>Descripción:</strong> ${level.description}</p>
+                <h4>Temas que aprenderás:</h4>
+                <ul style="text-align: left; margin: 15px 0;">
+                    ${level.topics.map(topic => `<li>${topic}</li>`).join('')}
+                </ul>
+                <div style="margin-top: 25px;">
+                    <a href="${level.pdfLink}" class="btn btn-primary" style="margin-right: 10px;">📄 Descargar PDF</a>
+                    <a href="${level.videoLink}" class="btn btn-secondary" style="margin-right: 10px;">🎥 Ver Video</a>
+                    ${!isLevelCompleted(level.id) ? `<button class="btn btn-primary" onclick="markAsCompleted(${level.id})">✓ Marcar como Completado</button>` : ''}
+                </div>
+            `;
+            
+            modal.style.display = 'block';
+        }
+
+        // Cerrar modal
+        function closeModal() {
+            document.getElementById('levelModal').style.display = 'none';
+        }
+
+        // Marcar nivel como completado
+        function markAsCompleted(levelId) {
+            if (!userProgress.completedLevels.includes(levelId)) {
+                userProgress.completedLevels.push(levelId);
+                userProgress.totalPoints += levelId * 100;
+                userProgress.totalTime += Math.floor(Math.random() * 3) + 2; // Simular tiempo
+                userProgress.currentStreak++;
+                
+                saveProgress();
+                updateUI();
+                closeModal();
+                
+                // Mostrar celebración
+                setTimeout(() => {
+                    alert(`¡Felicidades! Has completado el Nivel ${levelId}. Has ganado ${levelId * 100} puntos.`);
+                }, 100);
+            }
+        }
+
+        // Actualizar interfaz
+        function updateUI() {
+            updateProgress();
+            updateStats();
+            updateBadges();
+            renderLevels();
+        }
+
+        // Actualizar barra de progreso
+        function updateProgress() {
+            const progress = (userProgress.completedLevels.length / levelsData.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        // Actualizar estadísticas
+        function updateStats() {
+            document.getElementById('completedLevels').textContent = userProgress.completedLevels.length;
+            document.getElementById('totalTime').textContent = userProgress.totalTime;
+            document.getElementById('currentStreak').textContent = userProgress.currentStreak;
+            document.getElementById('totalPoints').textContent = userProgress.totalPoints;
+        }
+
+        // Actualizar badges
+        function updateBadges() {
+            const container = document.getElementById('badgesContainer');
+            container.innerHTML = '';
+
+            badgesData.forEach(badge => {
+                const earned = userProgress.completedLevels.length >= badge.requirement;
+                const badgeEl = document.createElement('div');
+                badgeEl.className = `badge ${earned ? '' : 'locked'}`;
+                badgeEl.innerHTML = `${badge.icon} ${badge.name}`;
+                container.appendChild(badgeEl);
+            });
+        }
+
+        // Cerrar modal al hacer clic fuera
+        window.onclick = function(event) {
+            const modal = document.getElementById('levelModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Inicializar aplicación
+        document.addEventListener('DOMContentLoaded', function() {
+            checkLoginStatus();
+        });
+    </script>
+</body>
+</html>

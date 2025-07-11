@@ -27,49 +27,372 @@
             font-size: 3rem;
             margin-bottom: 20px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: slideDown 1s ease-out;
         }
         
-        p {
+        .subtitle {
             font-size: 1.2rem;
             max-width: 600px;
             margin: 0 auto 30px;
+            animation: fadeIn 1.5s ease-out;
+        }
+        
+        .cta-button {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 20px 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
         }
         
         .features {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
             max-width: 1200px;
-            margin: 0 auto;
+            margin: 50px auto;
         }
         
         .feature {
             background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .feature:hover {
+            transform: translateY(-5px);
+            background: rgba(255,255,255,0.15);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .feature h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #ffd700;
+        }
+        
+        .feature p {
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+        
+        .levels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            max-width: 1000px;
+            margin: 30px auto;
+        }
+        
+        .level-card {
+            background: rgba(255,255,255,0.1);
             padding: 20px;
             border-radius: 10px;
-            backdrop-filter: blur(10px);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .level-card:hover {
+            border-color: #ffd700;
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.05);
+        }
+        
+        .level-card.completed {
+            border-color: #4caf50;
+            background: rgba(76, 175, 80, 0.2);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #2a5298 0%, #1e3c72 100%);
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            color: white;
+            position: relative;
+        }
+        
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: white;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4caf50, #8bc34a);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .section {
+            margin: 60px 0;
+        }
+        
+        .section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            color: #ffd700;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🎯 AutoCAD Training - 12 Niveles</h1>
-        <p>Bienvenido a nuestro programa completo de entrenamiento en AutoCAD. Domina el diseño técnico paso a paso.</p>
+        <p class="subtitle">Bienvenido a nuestro programa completo de entrenamiento en AutoCAD. Domina el diseño técnico paso a paso.</p>
+        
+        <button class="cta-button" onclick="startCourse()">🚀 Comenzar Curso</button>
+        <button class="cta-button" onclick="showProgress()">📊 Ver Progreso</button>
         
         <div class="features">
-            <div class="feature">
+            <div class="feature" onclick="showFeatureDetail('niveles')">
                 <h3>📚 12 Niveles Progresivos</h3>
-                <p>Desde principiante hasta experto</p>
+                <p>Desde principiante hasta experto. Cada nivel construye sobre el anterior para un aprendizaje sólido.</p>
             </div>
-            <div class="feature">
+            <div class="feature" onclick="showFeatureDetail('diseno')">
                 <h3>🎨 Diseño Profesional</h3>
-                <p>Aprende las mejores prácticas</p>
+                <p>Aprende las mejores prácticas utilizadas por profesionales en la industria.</p>
             </div>
-            <div class="feature">
+            <div class="feature" onclick="showFeatureDetail('certificacion')">
                 <h3>🏆 Certificación</h3>
-                <p>Obtén tu certificado al completar</p>
+                <p>Obtén tu certificado reconocido al completar todos los niveles del programa.</p>
             </div>
         </div>
+        
+        <div class="section">
+            <h2>🎓 Niveles del Curso</h2>
+            <div class="levels-grid" id="levelsGrid">
+                <!-- Los niveles se generarán dinámicamente -->
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>📈 Tu Progreso</h2>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <p id="progressText">Progreso: 0% completado</p>
+        </div>
     </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle">Título</h2>
+            <div id="modalContent">Contenido del modal</div>
+        </div>
+    </div>
+
+    <script>
+        // Datos de los niveles
+        const levels = [
+            { id: 1, name: "Introducción a AutoCAD", completed: false },
+            { id: 2, name: "Comandos Básicos", completed: false },
+            { id: 3, name: "Dibujo 2D", completed: false },
+            { id: 4, name: "Modificación de Objetos", completed: false },
+            { id: 5, name: "Layers y Propiedades", completed: false },
+            { id: 6, name: "Dimensiones y Cotas", completed: false },
+            { id: 7, name: "Bloques y Símbolos", completed: false },
+            { id: 8, name: "Layouts y Impresión", completed: false },
+            { id: 9, name: "Introducción 3D", completed: false },
+            { id: 10, name: "Modelado 3D Avanzado", completed: false },
+            { id: 11, name: "Renderizado", completed: false },
+            { id: 12, name: "Proyecto Final", completed: false }
+        ];
+
+        // Generar niveles
+        function generateLevels() {
+            const grid = document.getElementById('levelsGrid');
+            grid.innerHTML = '';
+            
+            levels.forEach(level => {
+                const levelCard = document.createElement('div');
+                levelCard.className = `level-card ${level.completed ? 'completed' : ''}`;
+                levelCard.innerHTML = `
+                    <h4>Nivel ${level.id}</h4>
+                    <p>${level.name}</p>
+                    <small>${level.completed ? '✅ Completado' : '⏳ Pendiente'}</small>
+                `;
+                levelCard.onclick = () => openLevel(level);
+                grid.appendChild(levelCard);
+            });
+        }
+
+        // Abrir nivel
+        function openLevel(level) {
+            const modal = document.getElementById('modal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalContent = document.getElementById('modalContent');
+            
+            modalTitle.textContent = `Nivel ${level.id}: ${level.name}`;
+            modalContent.innerHTML = `
+                <p>Contenido del ${level.name}</p>
+                <p>Estado: ${level.completed ? 'Completado ✅' : 'Pendiente ⏳'}</p>
+                <br>
+                <button class="cta-button" onclick="toggleLevel(${level.id})">
+                    ${level.completed ? 'Marcar como Pendiente' : 'Marcar como Completado'}
+                </button>
+            `;
+            
+            modal.style.display = 'block';
+        }
+
+        // Alternar estado del nivel
+        function toggleLevel(levelId) {
+            const level = levels.find(l => l.id === levelId);
+            level.completed = !level.completed;
+            generateLevels();
+            updateProgress();
+            closeModal();
+        }
+
+        // Actualizar progreso
+        function updateProgress() {
+            const completed = levels.filter(l => l.completed).length;
+            const percentage = (completed / levels.length) * 100;
+            
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('progressText').textContent = `Progreso: ${Math.round(percentage)}% completado (${completed}/${levels.length} niveles)`;
+        }
+
+        // Mostrar detalle de característica
+        function showFeatureDetail(feature) {
+            const modal = document.getElementById('modal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalContent = document.getElementById('modalContent');
+            
+            const features = {
+                niveles: {
+                    title: '📚 12 Niveles Progresivos',
+                    content: `
+                        <p>Nuestro programa está estructurado en 12 niveles cuidadosamente diseñados:</p>
+                        <ul style="text-align: left; margin: 20px 0;">
+                            <li>Niveles 1-3: Fundamentos básicos</li>
+                            <li>Niveles 4-6: Técnicas intermedias</li>
+                            <li>Niveles 7-9: Herramientas avanzadas</li>
+                            <li>Niveles 10-12: Proyectos profesionales</li>
+                        </ul>
+                        <p>Cada nivel incluye ejercicios prácticos y evaluaciones.</p>
+                    `
+                },
+                diseno: {
+                    title: '🎨 Diseño Profesional',
+                    content: `
+                        <p>Aprende las mejores prácticas de la industria:</p>
+                        <ul style="text-align: left; margin: 20px 0;">
+                            <li>Estándares de dibujo técnico</li>
+                            <li>Organización de proyectos</li>
+                            <li>Técnicas de presentación</li>
+                            <li>Flujos de trabajo eficientes</li>
+                        </ul>
+                        <p>Desarrolla habilidades que te destacarán en el mercado laboral.</p>
+                    `
+                },
+                certificacion: {
+                    title: '🏆 Certificación',
+                    content: `
+                        <p>Al completar el programa recibirás:</p>
+                        <ul style="text-align: left; margin: 20px 0;">
+                            <li>Certificado digital verificable</li>
+                            <li>Credencial para LinkedIn</li>
+                            <li>Portfolio de proyectos</li>
+                            <li>Acceso a comunidad de graduados</li>
+                        </ul>
+                        <p>Nuestra certificación es reconocida por empresas líderes en la industria.</p>
+                    `
+                }
+            };
+            
+            modalTitle.textContent = features[feature].title;
+            modalContent.innerHTML = features[feature].content;
+            modal.style.display = 'block';
+        }
+
+        // Comenzar curso
+        function startCourse() {
+            alert('🎉 ¡Bienvenido al curso de AutoCAD! Haz clic en cualquier nivel para comenzar.');
+        }
+
+        // Mostrar progreso
+        function showProgress() {
+            const completed = levels.filter(l => l.completed).length;
+            const percentage = Math.round((completed / levels.length) * 100);
+            alert(`📊 Tu progreso actual: ${percentage}% completado (${completed}/${levels.length} niveles)`);
+        }
+
+        // Cerrar modal
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        // Cerrar modal al hacer clic fuera
+        window.onclick = function(event) {
+            const modal = document.getElementById('modal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            generateLevels();
+            updateProgress();
+        });
+    </script>
 </body>
 </html>
